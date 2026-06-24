@@ -11,11 +11,11 @@
 #
 # Requires only: zlib, optparse, io/console, fiddle (all Ruby standard library).
 #
-# Usage (ruby is typically NOT on PATH on this box):
-#   C:\Ruby33-x64\bin\ruby.exe rose.rb --terminal
-#   C:\Ruby33-x64\bin\ruby.exe rose.rb --all -o rose
-#   C:\Ruby33-x64\bin\ruby.exe rose.rb --selftest
-# or use run.ps1 / run.cmd.
+# Usage:
+#   ruby rose.rb --terminal
+#   ruby rose.rb --all -o rose
+#   ruby rose.rb --selftest
+#   ruby rose.rb --help
 
 require 'zlib'
 require 'optparse'

@@ -1,3 +1,7 @@
 # generated animation artifacts (regenerate with `ruby rose.rb --all`)
 *.png
 *.gif
+
+# local launcher wrappers (machine-specific ruby path)
+*.ps1
+*.cmd

@@ -12,14 +12,12 @@ and the APNG/GIF encoders are all hand-written
 ## Run it
 
 ```powershell
-ruby rose.rb
-.\run.ps1 --terminal              # watch it bloom live in the console (Ctrl-C to quit)
-.\run.ps1 --all -o rose           # write rose.png (APNG) and rose.gif
-.\run.ps1 --apng myrose.png       # just the APNG
-.\run.ps1 --help       # just the APNG
+ruby rose.rb                      # watch it bloom live in the console (Ctrl-C to quit)
+ruby rose.rb --all -o rose        # write rose.png (APNG) and rose.gif
+ruby rose.rb --apng myrose.png    # just the APNG
+ruby rose.rb --help               # all options
 ```
 
-```
 ## Colours (single & double-colour)
 
 Colours are perceptually interpolated in Oklab/Oklch, so gradients stay clean
@@ -35,10 +33,10 @@ Colours accept `#rrggbb`, `#rgb`, or names (`red crimson pink blush white cream
 gold yellow orange magenta purple coral wine`).
 
 ```powershell
-.\run.ps1 --all --mode two-tone --color-a crimson --color-b blush -o classic
-.\run.ps1 --all --mode picotee  --color-a white   --color-b crimson -o picotee
-.\run.ps1 --all --mode single   --color-a "#B11226" -o deepred
-.\run.ps1 --all --mode picotee  --color-a gold --color-b magenta --picotee-start 0.7 -o fancy
+ruby rose.rb --all --mode two-tone --color-a crimson --color-b blush -o classic
+ruby rose.rb --all --mode picotee  --color-a white   --color-b crimson -o picotee
+ruby rose.rb --all --mode single   --color-a "#B11226" -o deepred
+ruby rose.rb --all --mode picotee  --color-a gold --color-b magenta --picotee-start 0.7 -o fancy
 ```
 
 ## --help
