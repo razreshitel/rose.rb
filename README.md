@@ -1,8 +1,8 @@
-# rose.rb — a blooming rose, in pure Ruby
+# rose.rb - a blooming rose, in pure Ruby
 
-- **Live terminal animation** — 24-bit colour using the Unicode half-block.
-- **Animated PNG (APNG)** — colour, transparency, loops forever.
-- **GIF89a** — 256-colour fallback, also loops forever.
+- **Live terminal animation** - 24-bit colour using the Unicode half-block.
+- **Animated PNG (APNG)** - colour, transparency, loops forever.
+- **GIF89a** - 256-colour fallback, also loops forever.
 
 **Pure Ruby + standard library only.** No gems, no ImageMagick, no ffmpeg. The
 geometry, the perceptual colour mixing, the anti-aliased software rasteriser,
@@ -69,24 +69,3 @@ Misc:
   --selftest            run internal correctness checks
   -h, --help
 ```
-
-## How it works
-
-- **Geometry** — concentric whorls of petals on a face-on disk; each petal is a
-  broad rounded teardrop placed by even spacing plus a golden-angle phase, with a
-  tangential lean that gives the rose its spiral swirl. Drawn back-to-front so
-  petals overlap like the real thing; a deep bud disk sits on top as the heart.
-- **Bloom** — one scalar `t∈[0,1]` drives every petal via a staggered
-  `smootherstep` (outer whorls open last). At `t=0` everything collapses onto the
-  centre — a single red dot. Playback is **ping-pong** (`0…N-1…1`), so it loops
-  seamlessly back to the dot.
-- **Colour** — authored in sRGB, mixed in Oklab/Oklch, composited in
-  **premultiplied linear light** (so edges don't pick up a dark halo on the
-  transparent background), then converted back to sRGB.
-- **Encoders** — APNG is assembled chunk-by-chunk (`IHDR/acTL/fcTL/IDAT/fdAT`,
-  CRC32, `zlib` DEFLATE per frame). GIF uses a median-cut palette (index 0
-  reserved transparent) and a hand-written fixed-width LZW that emits a CLEAR
-  before the table fills — bulletproof across decoders.
-
-Run `--selftest` to check the Oklab round-trip, the anti-aliased fill, the APNG
-chunk/sequence/CRC structure, and the GIF LZW round-trip.
