@@ -1,0 +1,94 @@
+# rose.rb — a blooming rose, in pure Ruby
+
+- **Live terminal animation** — 24-bit colour using the Unicode half-block.
+- **Animated PNG (APNG)** — colour, transparency, loops forever.
+- **GIF89a** — 256-colour fallback, also loops forever.
+
+**Pure Ruby + standard library only.** No gems, no ImageMagick, no ffmpeg. The
+geometry, the perceptual colour mixing, the anti-aliased software rasteriser,
+and the APNG/GIF encoders are all hand-written 
+(uses only `zlib`, `optparse`, `io/console`, `fiddle`).
+
+## Run it
+
+```powershell
+ruby rose.rb
+.\run.ps1 --terminal              # watch it bloom live in the console (Ctrl-C to quit)
+.\run.ps1 --all -o rose           # write rose.png (APNG) and rose.gif
+.\run.ps1 --apng myrose.png       # just the APNG
+.\run.ps1 --help       # just the APNG
+```
+
+```
+## Colours (single & double-colour)
+
+Colours are perceptually interpolated in Oklab/Oklch, so gradients stay clean
+(red→pink lands on salmon, never grey). Three modes:
+
+| Mode | What it does |
+|------|--------------|
+| `--mode single`   | One colour (`--color-a`). |
+| `--mode two-tone` | **Concentric** double-colour: inner petals `--color-a` blending out to `--color-b` at the rim. |
+| `--mode picotee`  | **Edge-tint** double-colour: petals are `--color-a` with `--color-b` painted on the edges/tips. |
+
+Colours accept `#rrggbb`, `#rgb`, or names (`red crimson pink blush white cream
+gold yellow orange magenta purple coral wine`).
+
+```powershell
+.\run.ps1 --all --mode two-tone --color-a crimson --color-b blush -o classic
+.\run.ps1 --all --mode picotee  --color-a white   --color-b crimson -o picotee
+.\run.ps1 --all --mode single   --color-a "#B11226" -o deepred
+.\run.ps1 --all --mode picotee  --color-a gold --color-b magenta --picotee-start 0.7 -o fancy
+```
+
+## --help
+
+```
+Front-ends (default --terminal):
+  --terminal            live console animation (loops until Ctrl-C)
+  --apng [PATH]         write an animated PNG   (default <out>.png)
+  --gif  [PATH]         write a GIF89a          (default <out>.gif)
+  --all                 write both files
+  --oneshot             play once, do not loop
+
+Colour / mode:
+  --mode single|two-tone|picotee
+  --color-a HEX|name    --color-b HEX|name
+  --picotee-start 0..1  --picotee-width 0..1
+  --backdrop HEX        matte behind the rose (GIF/terminal)
+  --term-bg HEX         terminal background
+
+Geometry / timing:
+  --size WxH            e.g. 200x200
+  --ss 1|2|3            supersample (2 = smooth export, 1 = fast)
+  --frames N            unique frames (played 2N-2 via ping-pong)
+  --fps N
+  --petals "1,5,8,11,15"  whorl petal counts, inner -> outer
+  --ascii               terminal glyph fallback
+
+Misc:
+  -o, --out NAME        base name for default file paths
+  --selftest            run internal correctness checks
+  -h, --help
+```
+
+## How it works
+
+- **Geometry** — concentric whorls of petals on a face-on disk; each petal is a
+  broad rounded teardrop placed by even spacing plus a golden-angle phase, with a
+  tangential lean that gives the rose its spiral swirl. Drawn back-to-front so
+  petals overlap like the real thing; a deep bud disk sits on top as the heart.
+- **Bloom** — one scalar `t∈[0,1]` drives every petal via a staggered
+  `smootherstep` (outer whorls open last). At `t=0` everything collapses onto the
+  centre — a single red dot. Playback is **ping-pong** (`0…N-1…1`), so it loops
+  seamlessly back to the dot.
+- **Colour** — authored in sRGB, mixed in Oklab/Oklch, composited in
+  **premultiplied linear light** (so edges don't pick up a dark halo on the
+  transparent background), then converted back to sRGB.
+- **Encoders** — APNG is assembled chunk-by-chunk (`IHDR/acTL/fcTL/IDAT/fdAT`,
+  CRC32, `zlib` DEFLATE per frame). GIF uses a median-cut palette (index 0
+  reserved transparent) and a hand-written fixed-width LZW that emits a CLEAR
+  before the table fills — bulletproof across decoders.
+
+Run `--selftest` to check the Oklab round-trip, the anti-aliased fill, the APNG
+chunk/sequence/CRC structure, and the GIF LZW round-trip.

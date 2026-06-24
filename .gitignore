@@ -1,0 +1,3 @@
+# generated animation artifacts (regenerate with `ruby rose.rb --all`)
+*.png
+*.gif
