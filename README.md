@@ -1,13 +1,6 @@
-# rose.rb - a blooming rose, in pure Ruby
+# Rose on Ruby. The Ruby Rose
 
-- **Live terminal animation** - 24-bit colour using the Unicode half-block.
-- **Animated PNG (APNG)** - colour, transparency, loops forever.
-- **GIF89a** - 256-colour fallback, also loops forever.
-
-**Pure Ruby + standard library only.** No gems, no ImageMagick, no ffmpeg. The
-geometry, the perceptual colour mixing, the anti-aliased software rasteriser,
-and the APNG/GIF encoders are all hand-written 
-(uses only `zlib`, `optparse`, `io/console`, `fiddle`).
+Pure Ruby + standard library only.
 
 ## Run it
 
