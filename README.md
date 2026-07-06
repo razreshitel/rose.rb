@@ -1,7 +1,5 @@
 # Rose on Ruby. The Ruby Rose
 
-A red rose that blooms in your terminal. Pure Ruby, no gems.
-
 ```
 ruby rose.rb          # bloom (Ctrl-C to quit)
 ruby rose.rb --help   # all options
